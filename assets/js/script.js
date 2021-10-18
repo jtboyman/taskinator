@@ -70,6 +70,9 @@ let completeEditTask = function(taskName, taskType, taskId) {
     //let u know
     alert("Task Updated!");
 
+    //save
+    saveTasks();
+
     //rest form
     formEl.removeAttribute("data-task-id");
     document.querySelector("#save-task").textContent = "Add Task";
@@ -98,6 +101,9 @@ let createTaskEl = function(taskDataObj) {
 
     //push the newly created object into the tasks array
     tasks.push(taskDataObj);
+
+    //save tasks to localStorage
+    saveTasks();
 
     //create buttons that correspond to the task id by storing that element in a variable
     let taskActionsEl = createTaskActions(taskIdCounter);
@@ -218,6 +224,8 @@ let taskStatusChangeHandler = function(event) {
             tasks[i].status = statusValue;
         }
     }
+    //save
+    saveTasks();
 };
 
 let deleteTask = function(taskId) {
@@ -237,7 +245,14 @@ let deleteTask = function(taskId) {
 
     //reassign tasks array to be the same as updatedTaskArr
     tasks = updatedTaskArr;
+
+    //save to array
+    saveTasks();
 };
+
+let saveTasks = function() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
 
 pageContentEl.addEventListener("click", taskButtonHandler);
 

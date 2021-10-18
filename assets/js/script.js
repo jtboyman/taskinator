@@ -254,6 +254,59 @@ let saveTasks = function() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
+let loadTasks = function() {
+    //get task items from localStoarge
+    tasks = localStorage.getItem("tasks");
+    
+    //for when it's empty
+    if (!tasks) {
+        tasks = [];
+        return false;
+    }
+
+    //convert tasks from teh string format back into an array of objects
+    tasks = JSON.parse(tasks);
+
+    //iterate through a tasks array and create task elements on the page from it
+    for (let i = 0; i <tasks.length; i++) {
+        tasks[i].id = taskIdCounter;
+        
+        //create li
+        let listItemEl = document.createElement("li");
+        listItemEl.className = "task-item";
+        listItemEl.setAttribute("data-task-id", tasks[i].id);
+        //create div
+        let taskInfoEl = document.createElement("div");
+        taskInfoEl.className = "task-info";
+        taskInfoEl.innerHTML = "<h3 class='task-name'>" + tasks[i].name + "</h3><span class='task-type'>" + tasks[i].type + "</span>";
+        //append div to li
+        listItemEl.appendChild(taskInfoEl);
+
+        //create the action for the task
+        taskActionsEl = createTaskActions(tasks[i].id);
+
+        listItemEl.appendChild(taskActionsEl);
+
+        //check where things belong
+        if (tasks[i].status === "to do") {
+            listItemEl.querySelector("select[name='status-change']").selectedIndex = 0;
+            tasksToDoEl.appendChild(listItemEl);
+        }
+
+        else if (tasks[i].status === "in progress") {
+            listItemEl.querySelector("select[name='status-change']").selectedIndex = 1;
+            tasksInProgressEl.appendChild(listItemEl);
+        }
+
+        else if (tasks[i].status === "completed") {
+            listItemEl.querySelector("select[name='status-change']").selectedIndex = 2;
+            tasksCompletedEl.appendChild(listItemEl);
+        }
+
+        taskIdCounter++;
+    }
+}
+
 pageContentEl.addEventListener("click", taskButtonHandler);
 
 pageContentEl.addEventListener("change", taskStatusChangeHandler);

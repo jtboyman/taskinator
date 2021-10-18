@@ -307,6 +307,8 @@ let loadTasks = function() {
     }
 }
 
+loadTasks();
+
 pageContentEl.addEventListener("click", taskButtonHandler);
 
 pageContentEl.addEventListener("change", taskStatusChangeHandler);
